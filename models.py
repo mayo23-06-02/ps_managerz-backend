@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Boolean, DateTime, UniqueConstraint, ForeignKey
+from sqlalchemy import Column, String, Integer, Boolean, DateTime, UniqueConstraint, Identity
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.mssql import UNIQUEIDENTIFIER
 
@@ -7,9 +7,9 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = "tbSystem_Users"
     
-    userID = Column(UNIQUEIDENTIFIER, primary_key=True, nullable=False)  # Primary key
+    userID = Column(UNIQUEIDENTIFIER, server_default="NEWID()")  # Primary key with auto-generated value
     systemKey_str = Column(String(20), nullable=False)  # systemKey_str
-    userName_str = Column(String(15), nullable=False)  # username
+    userName_str = Column(String(15), nullable=False, primary_key=True, unique=True)  # username
     password_str = Column(String(250), nullable=False)  # password_str
     title_str = Column(String(15))  # title_str
     firstName_str = Column(String(50))  # firstName_str
@@ -34,6 +34,7 @@ class User(Base):
     employeeID = Column(UNIQUEIDENTIFIER, nullable=True, unique=True)  # employeeID
     QRcode_str = Column(String, nullable=True)  # QRcode_str
     universal_bol = Column(Boolean)  # universal_bol
-    nationalIdNumber_str = Column(String(20), nullable=False)  # nationalIdNumber_str
+    nationalIdNumber_str = Column(String(20))  # nationalIdNumber_str
 
     __table_args__ = (UniqueConstraint('userName_str', 'email_str'),)  # Example constraint
+
