@@ -11,19 +11,3 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()  # Used by models.py
 
-# Test function to check if the connection is successful
-def test_connection():
-    try:
-        # Attempt to create a session
-        session = SessionLocal()
-        # Execute a simple query
-        session.execute(text('SELECT 1'))
-        # Close the session
-        session.close()
-        print("Connection successful!")
-    except OperationalError:
-        print("Connection failed!")
-
-# Call the test function
-test_connection()
-
