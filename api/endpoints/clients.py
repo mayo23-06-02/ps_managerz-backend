@@ -78,3 +78,10 @@ async def read_client(nationalIdNumber: str, db: Session = Depends(get_db)):
 async def read_clients(db: Session = Depends(get_db)):
     clients = db.query(DBClient).all()
     return [ClientGetAll.from_orm(client) for client in clients]
+
+@router.get("/client-oid/{clientOID}", response_model=ClientGetAll)
+async def read_client_by_oid(clientOID: UUID, db: Session = Depends(get_db)):
+    db_client = db.query(DBClient).filter(DBClient.OID == clientOID).first()
+    if db_client is None:
+        raise HTTPException(status_code=404, detail="Client not found")
+    return ClientGetAll.from_orm(db_client)
