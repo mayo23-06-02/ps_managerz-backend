@@ -1,9 +1,15 @@
+# main.py
 from fastapi import FastAPI
-from api.api import api_router
-from database import Base, engine
+from src.api.v1.routers import api_router
+from src.database.db import Base, engine
 
+app = FastAPI(title="PS Manager", version="1.0.0")
+
+# Create database tables (if applicable, may need reflection for existing DB)
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app.include_router(api_router, prefix="/api/v1")
 
-app.include_router(api_router)
+@app.get("/")
+async def root():
+    return {"message": "Welcome to PS Manager"}
